@@ -1,4 +1,5 @@
 import { parseJSON } from './dataUtils'
+import { scopedProtos } from './grpcUploads'
 import { GRPC_TEXT } from './grpcText'
 
 export const GRPC_METHOD = 'GRPC'
@@ -34,7 +35,8 @@ export function toGrpcTarget(request, variables) {
   const { url, headers, auth, options, grpcProtos, grpcImportRoots = '', inherited = [] } = request
   const entries = (value) => String(value || '').split(/[,\n]/).map((root) => root.trim()).filter(Boolean)
   const importRoots = [...entries(grpcImportRoots), ...[...inherited].reverse().flatMap((layer) => entries(layer.grpcImportRoots))]
-  return { address: url, headers, auth, options, variables, protos: parseProtoFiles(grpcProtos), importRoots, inherited }
+  const protos = parseProtoFiles(grpcProtos)
+  return { address: url, headers, auth, options, variables, protos, importRoots, importSources: scopedProtos(inherited, protos), inherited }
 }
 
 export function toGrpcCall(request, variables) {

@@ -87,6 +87,9 @@
     "importRootsDenied": "Import roots cannot read local files here. Use a trusted desktop folder or --allow-files in the CLI.",
     "importRootsUnsafe": "Import root {{path}} must be a safe workspace-relative directory.",
     "importRootsLimit": "The import roots exceed the permitted .proto file count or total size.",
-    "importRootsUnavailable": "Local import roots are unavailable here. Add the required .proto files directly or use server reflection."
+    "importRootsUnavailable": "Local import roots are unavailable here. Add the required .proto files directly or use server reflection.",
+    "uploadedFileUnsafe": "Uploaded Protobuf file {{path}} has an unsafe path.",
+    "uploadedFilesLimit": "The selected and uploaded Protobuf files exceed 200 files or 4 MB in total.",
+    "uploadedFilesInvalid": "The uploaded Protobuf folder copy is invalid. Re-upload the folder."
   }
 }

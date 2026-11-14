@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/kunalgoesbyken/gostman/engine"
+	"github.com/kunalgoesbyken/gostman/locales"
 	"github.com/kunalgoesbyken/gostman/mcpclient"
 	"github.com/kunalgoesbyken/gostman/rpc"
 	"github.com/kunalgoesbyken/gostman/runner/sandbox"
@@ -179,6 +180,13 @@ func (s *session) transmit(ctx context.Context, request Request) (engine.Respons
 		}
 		call.Target.Inherited = request.layers()
 		for i := len(call.Target.Inherited) - 1; i >= 0; i-- {
+			if copy := call.Target.Inherited[i].GrpcUploadedProtos; copy != "" {
+				var files []rpc.ProtoFile
+				if err := json.Unmarshal([]byte(copy), &files); err != nil {
+					return engine.Response{}, locales.Caused(locales.EngineGrpcUploadedFilesInvalid, nil, err)
+				}
+				call.Target.ImportSources = append(call.Target.ImportSources, files...)
+			}
 			for _, root := range strings.FieldsFunc(call.Target.Inherited[i].GrpcImportRoots, func(char rune) bool { return char == ',' || char == '\n' }) {
 				if name := strings.TrimSpace(root); name != "" {
 					call.Target.ImportRoots = append(call.Target.ImportRoots, name)
